@@ -1,4 +1,6 @@
-# Project1_
+# Project1
+## author:Zhijie Cao
+
 This is all the code I presented in class:
 include:
 1. shell script 
