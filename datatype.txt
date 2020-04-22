@@ -1,0 +1,3 @@
+Michael,Math:90|Physics:85,NJ|Piscataway,17
+Eric,Math:80|Physics:90,CA|Irvine,16
+William,Math:95|Physics:95,PA|Pittsburgh,15
