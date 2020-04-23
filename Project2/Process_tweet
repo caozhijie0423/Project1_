@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+import json
+data=[]
+with open("project/health.json", "r") as f1:
+    for line in f1: 
+        try:
+            data.append(json.loads(line))
+            # if you want to see a specific field, you can print it. 
+            #If your file is big, there may be too many of these printed
+            #print(data['text']) 
+        except:
+            continue
+
+
+## extract retweet and original tweet
+def fulltext(x):
+    if x['truncated']:
+        dic={'created_at':x['created_at'],'tweet_id':x['id_str'],'user_id':x['user']['id_str'],'text':x['extended_tweet']['full_text'],'hashtags':x['extended_tweet']['entities']['hashtags'],
+            'reply_count':x['reply_count'], 'retweet_count':x['retweet_count'],'favorite_count':x['favorite_count']}
+    else:
+        dic={'created_at':x['created_at'],'tweet_id':x['id_str'],'user_id':x['user']['id_str'],'text':x['text'],'hashtags':x['entities']['hashtags'],
+            'reply_count':x['reply_count'], 'retweet_count':x['retweet_count'],'favorite_count':x['favorite_count']}
+    return dic
+
+retweet=[]
+original=[]
+
+for tweet in data:
+    if type(tweet)!=dict:
+        continue
+    #whether it is a quoted tweet
+    if tweet['is_quote_status']:
+        ## quote a tweet
+        if not tweet['text'].startswith('RT @'):
+            original.append(fulltext(tweet))
+            retweet.append(fulltext(tweet['quoted_status']))
+        ##retweet a quoted tweet
+        else:
+            try:
+                retweet.append(fulltext(tweet['quoted_status']))
+            except:
+                continue
+    else:
+        ##whether it is a retweet
+        try:
+            ##if tweet['retweeted_status']:
+            retweet.append(fulltext(tweet['retweeted_status']))
+        except:
+            original.append(fulltext(tweet))
